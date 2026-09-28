@@ -41,11 +41,12 @@ SQUISHBOX 3D contains **4 distinct interactive toys** (well surpassing the 3 req
 - **Tidal Wave Shockwave:** Trigger radial wave pulses that send liquid droplets rippling outward.
 - **Zero-G Floating Beads:** Press 'G' to make liquid droplets float into space spheres.
 
-### 4. 🐱 Hungry Cat vs. Flying Cheese
-- **Agile Physics Chase:** Move your cursor to guide the hungry Cat avatar as the Flying Cheese darts and ricochets at supersonic speeds!
-- **Panic Evasion AI:** The cheese detects the approaching feline, accelerating away with funny thought bubbles and evasive swerves.
-- **⚡ Pounce Dash:** Hit Spacebar or click to execute a supersonic stamina pounce!
-- **Victory Feast:** Touch the cheese to trigger crispy crunch and meow sound effects, confetti celebrations, and level up!
+### 4. 🐭 Speedy Mouse vs. Flying Cheese
+- **Agile Physics Chase:** Move your cursor to guide the mouse avatar (`🐭`) with **zero cursor latency** as the Flying Cheese darts and ricochets at supersonic speeds!
+- **Difficulty Levels 1 to 5:** Progressive speed tiers from *Level 1 • Nibble Run* up to *Level 5 • Hyper Havarti*.
+- **Panic Evasion AI:** The cheese detects the approaching mouse, accelerating away with witty thought bubbles and evasive swerves.
+- **⚡ Scurry Sprint:** Hit Spacebar or click to execute a high-speed dash burst!
+- **Victory Feast:** Touch the cheese to trigger munch sound effects, confetti celebrations, and score boosts!
 
 ---
 
@@ -54,11 +55,11 @@ SQUISHBOX 3D contains **4 distinct interactive toys** (well surpassing the 3 req
 | Requirement / Bonus | Implementation in Squishbox 3D |
 | :--- | :--- |
 | **HTML, CSS, JavaScript** | 100% Vanilla without bulky frameworks or bundlers. |
-| **At least 3 Interactions** | 4 full gadgets (3D Jelly, Bubble Matrix, Liquid Slime, Cat & Cheese). |
+| **At least 3 Interactions** | 4 full gadgets (3D Jelly, Bubble Matrix, Liquid Slime, Mouse & Cheese). |
 | **Rich Animations** | 60 FPS Three.js vertex spring physics, Viscous fluid springs, confetti engine. |
-| **Sound Effects** | Custom **Web Audio API procedural synthesizer** (pops, meow, crunch, whoosh, time warp, zero-g). |
-| **Dark Mode & Themes** | 4 curated themes: `Dark Cyber`, `Midnight Void`, `Retro Synthwave`, `Bubblegum (Light Mode)`. |
-| **Easter Eggs & Riddles** | 🕺 **4-Step Disco Dance (`↑ ↓ ↑ ↓` / `↑ → ↓ ←`)**<br>🌌 **Cosmic Anti-Gravity (`G`)**<br>💻 **Matrix Rain (`M` or logo triple-click, `ESC` to exit)**<br>⏱️ **Chronos Time Warp (`T`)** |
+| **Sound Effects** | Custom **Web Audio API procedural synthesizer** (pops, zaps, chomp, whoosh, zero-g). |
+| **Dark Mode & Themes** | 4 curated themes: `Dark Cyber`, `Midnight Void`, `Retro Synthwave`, `☀️ Light Mode`. |
+| **Easter Eggs & Riddles** | 🕺 **Neon Disco Rave (`D` key, `ESC` to exit)**<br>🌌 **Cosmic Anti-Gravity (`G`)**<br>💻 **Matrix Rain (`M` or logo triple-click, strictly `ESC` to exit)**<br>⚡ **High-Voltage Lightning Trail (`L` or `R`)** |
 | **Score & Combo System** | Dynamic Satisfy-O-Meter, click streak multiplier (up to 10x frenzy), high score counter. |
 | **Local Storage** | Persists high score, total bubbles popped, cheeses caught, unlocked achievements, sound toggle, and theme preference. |
 | **Responsive Design** | Fluid layouts optimized for desktop, tablet, and mobile touch screens. |
@@ -70,20 +71,20 @@ SQUISHBOX 3D contains **4 distinct interactive toys** (well surpassing the 3 req
 SQUISHBOX 3D features a built-in Achievement System with badges saved to `localStorage`:
 - 🫧 **Pop Prodigy:** Pop 50 bubbles.
 - 🧀 **Master Cheese Hunter:** Capture the supersonic flying cheese.
-- 🕺 **Disco Legend:** Unlock the 4-step Neon Disco Rave.
+- 🕺 **Disco Legend:** Unlock the Neon Disco Rave party.
 - 🌌 **Physics Violator:** Invert gravity across cosmic toys.
 - 💻 **Cyber Operative:** Discover the secret Matrix terminal (ESC to exit).
-- ⏱️ **Chronos Weaver:** Warp spacetime into 0.3x slow-motion.
+- ⚡ **Lightning Storm:** Awaken high-voltage lightning bolt cursor trail.
 - ⚡ **Max Overdrive:** Reach 100% on the Satisfy-O-Meter.
 
 ---
 
 ## 🕹️ Secret Controls & Easter Eggs (Spoilers!)
 
-- **4-Step Disco Dance:** Press <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>↓</kbd> or spin the four winds <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> <kbd>←</kbd> (or type `disco`) to initiate the **Full Neon Disco Rave** with 8-bit beat and disco ball.
+- **Neon Disco Rave:** Press <kbd>D</kbd> (or the 4th letter of the alphabet) to initiate the **Full Neon Disco Rave** with 8-bit beat and disco ball. Press <kbd>ESC</kbd> to exit.
 - **Anti-Gravity:** Press <kbd>G</kbd> to invert gravity across both the 3D Jelly and Liquid Slime.
-- **Matrix Digital Rain:** Press <kbd>M</kbd> or **triple-click the top-left logo** to trigger terminal cyber code rain. Press <kbd>ESC</kbd> to exit.
-- **Time Warp:** Press <kbd>T</kbd> to slow down spacetime to 0.3x cinematic flow.
+- **Matrix Digital Rain:** Press <kbd>M</kbd> or **triple-click the top-left logo** to trigger terminal cyber code rain. Strictly press <kbd>ESC</kbd> to exit.
+- **Lightning Bolt Trail:** Press <kbd>L</kbd> (or <kbd>R</kbd>) to unleash a crackling high-voltage lightning cursor trail.
 
 ---
 
@@ -97,8 +98,8 @@ Simply double-click [`index.html`](index.html) or drag it into any modern web br
 ### Method 2: Local HTTP Server (Optional)
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/gcsrm-webtoy.git
-cd gcsrm-webtoy
+git clone https://github.com/BlueMango9/squishbox-3d-webtoy.git
+cd squishbox-3d-webtoy
 
 # Run with Python
 python -m http.server 8000
