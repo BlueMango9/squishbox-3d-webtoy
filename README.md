@@ -7,7 +7,7 @@
 
 ## 🌟 Live Demo & Video Walkthrough
 
-- 🔗 **Live Demo Link:** [https://squishbox-3d.vercel.app](https://squishbox-3d.vercel.app) *(or open `index.html` locally in any browser with zero setup)*
+- 🔗 **Live Demo Link:** [https://bluemango9.github.io/squishbox-3d-webtoy/](https://bluemango9.github.io/squishbox-3d-webtoy/) *(or open `index.html` locally in any browser with zero setup)*
 - 🎥 **Demonstration Video:** Included in repository assets (`/demo.mp4` / `demo.webp`).
 
 ---
