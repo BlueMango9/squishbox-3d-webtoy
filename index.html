@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQUISHBOX 3D • The Ultimate Cosmic Web Toy</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+  <meta name="description" content="An interactive, ridiculously addictive 3D Web Toy built for GitHub Community SRM (GCSRM) Recruitment 2026. Features soft-body physics, bubble wrap, particle chaos, and hidden secrets.">
+
+  <!-- Google Fonts: Space Grotesk & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Three.js (r128 CDN) for 3D Soft-Body WebGL Toy -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark-cyber">
+
+  <!-- Fullscreen Easter Egg Overlays -->
+  <div id="matrixContainer" class="fullscreen-overlay matrix-layer">
+    <canvas id="matrixCanvas"></canvas>
+    <div class="matrix-esc-pill">⌨️ Press ESC to Exit Matrix</div>
+  </div>
+  <div id="discoOverlay" class="fullscreen-overlay disco-layer">
+    <div class="disco-ball">🪩</div>
+    <div class="disco-banner">🕺 NEON DISCO RAVE • 8-BIT RHYTHM PARTY 🪩</div>
+    <div class="disco-sub-hint">⌨️ Press ESC or click button to exit</div>
+    <button id="exitDiscoBtn" class="pill-btn neon-btn">Exit Disco</button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="app-layout">
+    
+    <!-- Header / Control Deck -->
+    <header class="top-nav">
+      <div class="brand-group">
+        <h1 id="toyLogo" class="logo" title="Psst... triple click me for a secret!">
+          <span class="sparkle">✦</span> SQUISHBOX <span class="badge-3d">3D</span>
+        </h1>
+        <span class="sub-badge">GCSRM '26 Web Toy</span>
+      </div>
+
+      <!-- Live Satisfy-O-Meter & Combo Deck -->
+      <div class="meter-wrapper">
+        <div class="meter-info">
+          <span class="meter-title">✨ SATISFY-O-METER</span>
+          <span id="satisfactionLabel" class="meter-percent">30%</span>
+        </div>
+        <div class="meter-track">
+          <div id="satisfactionFill" class="meter-bar" style="width: 30%;"></div>
+        </div>
+        <div class="meter-subtext">"watch out for easter eggs"</div>
+      </div>
+
+      <!-- Score & Combo Stat Cards -->
+      <div class="stats-group">
+        <div class="stat-pill" title="Current Score">
+          <span class="stat-icon">⭐</span>
+          <span id="scoreValue" class="stat-num">0</span>
+        </div>
+        <div class="stat-pill combo-pill" title="Combo Multiplier">
+          <span class="stat-icon">🔥</span>
+          <span id="comboValue" class="stat-num">1.0x</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="nav-actions">
+        <!-- Theme Selector (Dark Mode & Presets) -->
+        <select id="themeSelect" class="styled-select" aria-label="Select Theme">
+          <option value="dark-cyber">🌌 Dark Cyber</option>
+          <option value="midnight-void">🌑 Midnight Void</option>
+          <option value="retro-synth">🕹️ Retro Synth</option>
+          <option value="bubblegum">☀️ Light Mode</option>
+        </select>
+
+        <!-- Sound FX Switcher -->
+        <button id="audioToggle" class="pill-btn icon-btn" title="Toggle Sound FX">🔊 Sound FX</button>
+
+        <!-- Achievements Modal Trigger -->
+        <button id="openAchievementsBtn" class="pill-btn highlight-btn" title="View Achievements">
+          🏆 <span id="achieveCountBadge">0 / 7</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs for the 4 Toys -->
+    <nav class="toy-tabs" aria-label="Toy Navigation">
+      <button class="tab-btn active" data-tab="jellyTab">
+        <span class="tab-emoji">🔮</span> 3D Kinetic Jelly
+      </button>
+      <button class="tab-btn" data-tab="bubbleTab">
+        <span class="tab-emoji">🫧</span> Infinite Pop-It
+      </button>
+      <button class="tab-btn" data-tab="chaosTab">
+        <span class="tab-emoji">🌊</span> Liquid Slime
+      </button>
+      <button class="tab-btn" data-tab="buttonTab">
+        <span class="tab-emoji">🐭</span> Mouse & Cheese
+      </button>
+    </nav>
+
+    <!-- Main Toy Arena -->
+    <main class="toy-stage">
+
+      <!-- ==================== TAB 1: 3D KINETIC JELLY ==================== -->
+      <section id="jellyTab" class="toy-panel active">
+        <div class="panel-header">
+          <div class="panel-headline">
+            <h2>Cosmic Soft-Body Jelly</h2>
+            <p>Interactive 3D WebGL mesh. <strong>Click & drag</strong> to stretch & slingshot. Poke to ripple. Eyes track your cursor!</p>
+          </div>
+          <div class="panel-controls">
+            <button id="pokeJellyBtn" class="control-btn glow-btn">👉 Poke Center</button>
+            <button id="jiggleJellyBtn" class="control-btn">🌀 Wobble Shock</button>
+          </div>
+        </div>
+
+        <div id="jelly3dContainer" class="canvas-box jelly-viewport">
+          <div class="canvas-overlay-hint">
+            <span>🖐️ Drag & Release to Slingshot • Click to Poke</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: BUBBLE POP-IT MATRIX ==================== -->
+      <section id="bubbleTab" class="toy-panel">
+        <div class="panel-header">
+          <div class="panel-headline">
+            <h2>Tactile Bubble-Wrap Matrix</h2>
+            <p>Hyper-satisfying infinite popping. Each pop triggers procedural musical synth notes. Chain them together!</p>
+          </div>
+          <div class="panel-controls">
+            <button id="popAllBubblesBtn" class="control-btn glow-btn">💥 Frenzy Pop All</button>
+            <button id="reinflateBubblesBtn" class="control-btn">🔄 Reinflate Matrix</button>
+          </div>
+        </div>
+
+        <div class="bubble-board-wrapper">
+          <div id="bubbleGrid" class="bubble-grid">
+            <!-- Pop cells dynamically generated by toy.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: NEON LIQUID SLIME ==================== -->
+      <section id="chaosTab" class="toy-panel">
+        <div class="panel-header">
+          <div class="panel-headline">
+            <h2>Cosmic Liquid Slime & Wave Garden</h2>
+            <p>Viscous neon fluid simulation. <strong>Click & drag</strong> to stream gooey liquid ribbons. Droplets connect with surface tension!</p>
+          </div>
+          <div class="panel-controls">
+            <button id="flipGravityBtn" class="control-btn">🌌 Zero-G Float (G)</button>
+            <button id="toggleVortexBtn" class="control-btn">🕳️ Fluid Vortex</button>
+            <button id="shockwaveBtn" class="control-btn glow-btn">⚡ Tsunami Wave</button>
+            <button id="spawnBatchBtn" class="control-btn">✨ Add Slime +35</button>
+            <button id="clearSandboxBtn" class="control-btn danger-btn">🧹 Drain Fluid</button>
+          </div>
+        </div>
+
+        <div class="canvas-box sandbox-viewport">
+          <canvas id="sandboxCanvas"></canvas>
+          <div class="canvas-overlay-hint">
+            <span>🖐️ Drag to stream glowing viscous slime • Right-click for tidal shockwave</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 4: MOUSE & FLYING CHEESE ==================== -->
+      <section id="buttonTab" class="toy-panel">
+        <div class="panel-header">
+          <div class="panel-headline">
+            <h2>🐭 Speedy Mouse vs. Flying Cheese</h2>
+            <p>Move your cursor to guide the mouse directly. The cheese darts around with erratic physics! <strong>Catch the cheese</strong> to feast!</p>
+          </div>
+          <div class="panel-controls">
+            <div class="difficulty-group">
+              <label for="cheeseDiffSelect" class="control-label">Difficulty:</label>
+              <select id="cheeseDiffSelect" class="styled-select mini-select">
+                <option value="1">Level 1 • Nibble Run</option>
+                <option value="2">Level 2 • Cheddar Sprint</option>
+                <option value="3" selected>Level 3 • Gouda Glide</option>
+                <option value="4">Level 4 • Sonic Swiss</option>
+                <option value="5">Level 5 • Hyper Havarti</option>
+              </select>
+            </div>
+            <button id="dashCatBtn" class="control-btn glow-btn">⚡ Scurry Sprint (Space)</button>
+            <button id="resetCatGameBtn" class="control-btn">🔄 Respawn Cheese</button>
+            <span id="cheeseScoreBadge" class="info-badge">🧀 Munched: 0</span>
+          </div>
+        </div>
+
+        <div id="catCheeseArena" class="cat-cheese-arena">
+          <!-- The Flying Cheese -->
+          <div id="flyingCheese" class="flying-cheese" title="Catch me if you can!">
+            <span class="cheese-emoji">🧀</span>
+            <div id="cheeseDialog" class="cheese-bubble">Too fast for you!</div>
+          </div>
+
+          <!-- The Hunter Mouse -->
+          <div id="hunterCat" class="hunter-cat">
+            <span id="catAvatar" class="cat-emoji">🐭</span>
+            <div class="cat-paws">🐾</div>
+          </div>
+
+          <!-- Dash Cooldown Indicator -->
+          <div class="dash-meter-container">
+            <span class="dash-label">⚡ SCURRY STAMINA</span>
+            <div class="dash-track">
+              <div id="dashStaminaBar" class="dash-bar" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer with Hidden Easter Egg Clues & Secrets -->
+    <footer class="app-footer">
+      <div class="easter-clues-wrapper">
+        <button id="toggleCluesBtn" class="clue-toggle-pill" type="button" aria-expanded="false" title="Unravel the hidden mysteries of the cosmos">
+          <span>🔮 Cosmic Riddles</span>
+          <span class="clue-tag">4 Secrets in Plain Sight</span>
+          <span id="clueChevron" class="clue-chevron">▼</span>
+        </button>
+
+        <div id="cluesDrawer" class="clues-drawer single-line-riddles">
+          <div class="clue-card">
+            <span class="clue-glyph">🕺</span>
+            <div class="clue-text">
+              <strong>The Neon Groove:</strong>
+              <em>Strike the 4th letter of the alphabet to awaken the ecstatic neon dance rave. Escape with ESC.</em>
+            </div>
+          </div>
+          <div class="clue-card">
+            <span class="clue-glyph">🌌</span>
+            <div class="clue-text">
+              <strong>The Graviton Paradox:</strong>
+              <em>Sir Isaac Newton wept when the 7th letter was struck, turning universal gravity upside down.</em>
+            </div>
+          </div>
+          <div class="clue-card">
+            <span class="clue-glyph">💻</span>
+            <div class="clue-text">
+              <strong>The Matrix Breach:</strong>
+              <em>Knock thrice upon the crown or invoke the initial of the simulation to tear reality. Escape only with ESC.</em>
+            </div>
+          </div>
+          <div class="clue-card">
+            <span class="clue-glyph">⚡</span>
+            <div class="clue-text">
+              <strong>The Storm Surge:</strong>
+              <em>Invoke the 12th letter of the alphabet to awaken crackling lightning bolts across your path.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================== ACHIEVEMENTS MODAL ==================== -->
+  <div id="achievementsModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🏆 Hall of Useless Achievements</h3>
+        <button id="closeAchievementsBtn" class="close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <p class="modal-sub">Earn badges by being curious, persistent, and thoroughly unproductive.</p>
+      <div id="achievementsList" class="achievements-grid">
+        <!-- Rendered by toy.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic Scripts -->
+  <script src="audio.js"></script>
+  <script src="jelly3d.js"></script>
+  <script src="sandbox.js"></script>
+  <script src="toy.js"></script>
+  
+  <!-- App Bootstrapper -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Init Game State & Storage
+      window.toyState = new ToyState();
+
+      // 2. Init 3D Jelly Toy
+      try {
+        window.jellyInstance = new JellyToy('jelly3dContainer');
+      } catch (err) {
+        console.warn('3D WebGL initialization warning:', err);
+      }
+
+      // 3. Init Chaos Physics Sandbox
+      window.sandboxInstance = new ChaosSandbox('sandboxCanvas');
+
+      // 4. Tab Switching Logic
+      const tabs = document.querySelectorAll('.tab-btn');
+      const panels = document.querySelectorAll('.toy-panel');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+
+          tab.classList.add('active');
+          const target = document.getElementById(tab.dataset.tab);
+          if (target) {
+            target.classList.add('active');
+            if (window.soundEngine) window.soundEngine.playPop(0.9);
+            
+            // Resize canvases on tab switch
+            if (tab.dataset.tab === 'jellyTab' && window.jellyInstance) {
+              window.jellyInstance.onResize();
+            } else if (tab.dataset.tab === 'chaosTab' && window.sandboxInstance) {
+              window.sandboxInstance.resize();
+            }
+          }
+        });
+      });
+
+      // 5. Controls wiring
+      // 3D Jelly Buttons
+      document.getElementById('pokeJellyBtn')?.addEventListener('click', () => {
+        if (window.jellyInstance) window.jellyInstance.pokeCenter();
+      });
+      document.getElementById('jiggleJellyBtn')?.addEventListener('click', () => {
+        if (window.jellyInstance) {
+          window.jellyInstance.deformRandom(1.5);
+          if (window.soundEngine) window.soundEngine.playBoing();
+        }
+      });
+
+      // Sandbox Buttons
+      document.getElementById('flipGravityBtn')?.addEventListener('click', () => {
+        if (window.toyState) {
+          window.toyState.triggerAntiGravity();
+        }
+      });
+      document.getElementById('toggleVortexBtn')?.addEventListener('click', (e) => {
+        if (window.sandboxInstance) {
+          const active = window.sandboxInstance.toggleVortex();
+          e.target.innerText = active ? '🌀 Vortex Active (Hold Click)' : '🕳️ Cursor Vortex';
+          e.target.classList.toggle('active', active);
+          if (window.soundEngine) window.soundEngine.playWhoosh();
+        }
+      });
+      document.getElementById('shockwaveBtn')?.addEventListener('click', () => {
+        if (window.sandboxInstance) window.sandboxInstance.triggerShockwave();
+      });
+      document.getElementById('spawnBatchBtn')?.addEventListener('click', () => {
+        if (window.sandboxInstance) window.sandboxInstance.spawnBatch(25);
+      });
+      document.getElementById('clearSandboxBtn')?.addEventListener('click', () => {
+        if (window.sandboxInstance) {
+          window.sandboxInstance.clear();
+          if (window.soundEngine) window.soundEngine.playWhoosh();
+        }
+      });
+
+      // Cat & Cheese Controls
+      document.getElementById('dashCatBtn')?.addEventListener('click', () => {
+        if (window.toyState) window.toyState.pounceDashCat();
+      });
+      document.getElementById('resetCatGameBtn')?.addEventListener('click', () => {
+        if (window.toyState) window.toyState.resetCatGame();
+      });
+      document.getElementById('cheeseDiffSelect')?.addEventListener('change', (e) => {
+        if (window.toyState) window.toyState.setCheeseDifficulty(e.target.value);
+        e.target.blur();
+      });
+
+      // Cosmic Riddles Drawer Toggle
+      const toggleCluesBtn = document.getElementById('toggleCluesBtn');
+      const cluesDrawer = document.getElementById('cluesDrawer');
+      const clueChevron = document.getElementById('clueChevron');
+      if (toggleCluesBtn && cluesDrawer) {
+        toggleCluesBtn.addEventListener('click', () => {
+          const isOpen = cluesDrawer.classList.toggle('open');
+          toggleCluesBtn.setAttribute('aria-expanded', isOpen);
+          if (clueChevron) clueChevron.innerText = isOpen ? '▲' : '▼';
+          if (window.soundEngine) window.soundEngine.playPop(1.2);
+        });
+      }
+
+      // Achievements Modal Wiring
+      const modal = document.getElementById('achievementsModal');
+      document.getElementById('openAchievementsBtn')?.addEventListener('click', () => {
+        modal.classList.add('open');
+        if (window.soundEngine) window.soundEngine.playPop(1.1);
+      });
+      document.getElementById('closeAchievementsBtn')?.addEventListener('click', () => {
+        modal.classList.remove('open');
+      });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
